@@ -1,11 +1,11 @@
-import { HelloRepository } from '../../domain/repositories/HelloRepository';
+import { IHelloRepository } from '../../domain/repositories/IHelloRepository';
 import { Hello } from '../../domain/entities/Hello';
-import { CreateHello } from '../interfaces/CreateHello';
+import { ICreateHelloUseCase } from './interfaces/ICreateHelloUseCase';
 
-class CreateHelloUseCase implements CreateHello {
-  private helloRepository: HelloRepository;
+class CreateHelloUseCase implements ICreateHelloUseCase {
+  private helloRepository: IHelloRepository;
 
-  constructor(helloRepository: HelloRepository) {
+  constructor(helloRepository: IHelloRepository) {
     this.helloRepository = helloRepository;
   }
 

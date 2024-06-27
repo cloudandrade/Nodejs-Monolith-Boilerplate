@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import CreateHelloUseCase from '../../../../application/useCases/CreateHelloUseCase';
-import HelloRepositoryImpl from '../../implementations/repository/HelloRepositoryImpl';
+import HelloRepositoryImpl from '../../../adapters/implementations/repository/HelloRepositoryImpl';
 import { Hello } from '../../../../domain/entities/Hello';
 import AppError from '../../../../shared/errors/AppError';
 import logger from '../../../../shared/utils/logger';
@@ -23,9 +23,14 @@ class HelloController {
       logger.info(`Hello created with text: ${helloText}`);
 
       res.status(201).json(result);
-    } catch (error) {
-      logger.error(`Error creating hello: ${error.message}`);
-      next(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        logger.error(`Error creating hello: ${error.message}`);
+        next(new AppError(error.message, 400));
+      } else {
+        logger.error('Unknown error');
+        next(new AppError('Internal Server Error', 500));
+      }
     }
   }
 }

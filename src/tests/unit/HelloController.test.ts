@@ -1,57 +1,87 @@
-import request from 'supertest';
-import express, { Application } from 'express';
-import bodyParser from 'body-parser';
+import { Request, Response, NextFunction } from 'express';
 import HelloController from '../../infra/adapters/http/controllers/HelloController';
+import CreateHelloUseCase from '../../application/useCases/CreateHelloUseCase';
+import HelloRepositoryImpl from '../../infra/adapters/implementations/repository/HelloRepositoryImpl';
 import { Hello } from '../../domain/entities/Hello';
 import AppError from '../../shared/errors/AppError';
 
-const app: Application = express();
-app.use(bodyParser.json());
+// Mock the HelloRepository and CreateHelloUseCase
+//jest.mock('../../application/useCases/CreateHelloUseCase');
+jest.mock('../../infra/adapters/implementations/repository/HelloRepositoryImpl');
 
-app.post('/api/hello', HelloController.createHello);
+// Extend the NextFunction type to include Jest mock properties
+type MockNextFunction = NextFunction & jest.Mock;
 
 describe('HelloController', () => {
-  it('should create a hello and return 201 status', async () => {
-    const mockRepository = {
-      save: jest.fn().mockResolvedValue({
-        helloText: 'Hello World',
-        createdAt: new Date(),
-      }),
+  let req: Partial<Request>;
+  let res: Partial<Response>;
+  let next: MockNextFunction;
+  let helloRepository: jest.Mocked<HelloRepositoryImpl>;
+  let createHelloUseCase: CreateHelloUseCase;
+
+  beforeEach(() => {
+    req = {
+      body: {}
     };
-    
-    jest.spyOn(HelloController, 'createHello').mockImplementation(async (req, res, next) => {
-      const hello = new Hello({ helloText: req.body.helloText });
-      const result = await mockRepository.save(hello);
-      res.status(201).json(result);
-    });
 
-    const response = await request(app)
-      .post('/api/hello')
-      .send({ helloText: 'Hello World' });
+    res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn()
+    };
 
-    expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty('helloText', 'Hello World');
+    next = jest.fn() as MockNextFunction;
+
+    helloRepository = new HelloRepositoryImpl() as jest.Mocked<HelloRepositoryImpl>;
+
+    // Create an instance of CreateHelloUseCase
+    createHelloUseCase = new CreateHelloUseCase(helloRepository);
+  });
+
+  it('should create a hello and return 201 status', async () => {
+    req.body = { helloText: 'Hello World' };
+    const mockResult = {
+      helloText: 'Hello World',
+      createdAt: new Date(),
+    };
+
+    // Spy on execute method of createHelloUseCase
+    const executeSpy = jest.spyOn(createHelloUseCase, 'execute');
+    executeSpy.mockResolvedValue(mockResult);
+
+    await HelloController.createHello(req as Request, res as Response, next);
+
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith(mockResult);
+
+    // Restore the spy
+    executeSpy.mockRestore();
   });
 
   it('should return 400 if helloText is missing', async () => {
-    const response = await request(app)
-      .post('/api/hello')
-      .send({});
+    req.body = {};
 
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('message', 'helloText is required');
+    await HelloController.createHello(req as Request, res as Response, next);
+
+    expect(next).toHaveBeenCalledWith(expect.any(AppError));
+    const appError = next.mock.calls[0][0] as AppError;
+    expect(appError.statusCode).toBe(400);
+    expect(appError.message).toBe('helloText is required');
   });
 
   it('should handle errors and return 500 status', async () => {
-    jest.spyOn(HelloController, 'createHello').mockImplementation(async (req, res, next) => {
-      throw new AppError('Internal Server Error', 500);
-    });
+    req.body = { helloText: 'Hello World' };
 
-    const response = await request(app)
-      .post('/api/hello')
-      .send({ helloText: 'Hello World' });
+    const executeSpy = jest.spyOn(createHelloUseCase, 'execute');
+    executeSpy.mockRejectedValue(new Error('Internal Server Error'));
 
-    expect(response.status).toBe(500);
-    expect(response.body).toHaveProperty('message', 'Internal Server Error');
+    await HelloController.createHello(req as Request, res as Response, next);
+
+    expect(next).toHaveBeenCalledWith(expect.any(Error));
+    const error = next.mock.calls[0][0] as any;
+    expect(error.statusCode).toBe(500);
+    expect(error.message).toBe('Internal Server Error');
+
+    // Restore the spy
+    executeSpy.mockRestore();
   });
 });

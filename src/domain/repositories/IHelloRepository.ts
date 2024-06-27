@@ -1,5 +1,5 @@
 import { Hello } from '../entities/Hello';
 
-export interface HelloRepository {
+export interface IHelloRepository {
   save(hello: Hello): Promise<any>;
 }
