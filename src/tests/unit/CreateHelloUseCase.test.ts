@@ -1,6 +1,6 @@
 import CreateHelloUseCase from '../../application/useCases/CreateHelloUseCase';
-import { Hello } from '../../domain/entities/Hello';
-import { IHelloRepository } from '../../domain/repositories/IHelloRepository';
+import { Hello } from '../../domain/entity/Hello';
+import { IHelloRepository } from '../../domain/repository/IHelloRepository';
 
 describe('CreateHelloUseCase', () => {
   it('should create a hello entity', async () => {

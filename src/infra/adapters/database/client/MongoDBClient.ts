@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import { config } from '../../../config';
-import logger from '../../../shared/utils/logger';
+import { config } from '../../../../config';
+import logger from '../../../../shared/utils/logger';
 
 mongoose.connect(config.mongodb.uri, {
   useNewUrlParser: true,

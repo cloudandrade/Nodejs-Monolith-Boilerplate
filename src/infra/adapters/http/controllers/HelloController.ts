@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import CreateHelloUseCase from '../../../../application/useCases/CreateHelloUseCase';
-import HelloRepositoryImpl from '../../../adapters/implementations/repository/HelloRepositoryImpl';
-import { Hello } from '../../../../domain/entities/Hello';
+import HelloRepository from '../../../adapters/database/repository/HelloRepository';
+import { Hello } from '../../../../domain/entity/Hello';
 import AppError from '../../../../shared/errors/AppError';
 import logger from '../../../../shared/utils/logger';
 
@@ -14,7 +14,7 @@ class HelloController {
         throw new AppError('helloText is required', 400);
       }
 
-      const helloRepository = new HelloRepositoryImpl();
+      const helloRepository = new HelloRepository();
       const createHelloUseCase = new CreateHelloUseCase(helloRepository);
 
       const hello = new Hello({ helloText });

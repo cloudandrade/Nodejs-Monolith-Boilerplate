@@ -1,4 +1,4 @@
-import { Hello } from '../entities/Hello';
+import { Hello } from '../entity/Hello';
 
 export interface IHelloRepository {
   save(hello: Hello): Promise<any>;
