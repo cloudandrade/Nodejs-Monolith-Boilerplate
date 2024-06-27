@@ -1,8 +1,8 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-module.exports = {
+export const config = {
   mongodb: {
     uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/mydatabase',
   },
