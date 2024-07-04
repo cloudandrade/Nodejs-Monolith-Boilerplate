@@ -6,6 +6,42 @@ import AppError from '../../../../shared/errors/AppError';
 import logger from '../../../../shared/utils/logger';
 
 class HelloController {
+  
+  /**
+ * @swagger
+ * /hello:
+ *   post:
+ *     summary: Create a new hello message
+ *     tags: [Hello]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - helloText
+ *             properties:
+ *               helloText:
+ *                 type: string
+ *                 example: Hello World
+ *     responses:
+ *       201:
+ *         description: Hello message created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 helloText:
+ *                   type: string
+ *                   example: Hello World
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *       400:
+ *         description: Bad request
+ */
   static async createHello(req: Request, res: Response, next: NextFunction) {
     try {
       const { helloText } = req.body;
