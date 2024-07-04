@@ -8,6 +8,7 @@
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "generate-db": "",
     "docker": "docker-compose up -d",
     "logs": "node src/infra/scripts/clearLogs.js",
