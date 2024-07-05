@@ -1,6 +1,6 @@
-import { IHelloRepository } from '../../domain/repository/IHelloRepository';
-import { Hello } from '../../domain/entity/Hello';
-import { ICreateHelloUseCase } from './interfaces/ICreateHelloUseCase';
+import { IHelloRepository } from '#domain/repository/IHelloRepository';
+import { Hello } from '#domain/entity/Hello';
+import { ICreateHelloUseCase } from '#application/useCases/interfaces/ICreateHelloUseCase';
 
 class CreateHelloUseCase implements ICreateHelloUseCase {
   private helloRepository: IHelloRepository;

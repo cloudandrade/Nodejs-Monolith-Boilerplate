@@ -1,6 +1,6 @@
-import { IHelloRepository } from '../../../../domain/repository/IHelloRepository';
-import HelloModel from '../model/HelloModel';
-import { Hello } from '../../../../domain/entity/Hello';
+import { IHelloRepository } from '#domain/repository/IHelloRepository';
+import HelloModel from '#infra/adapters/database/model/HelloModel';
+import { Hello } from '#domain/entity/Hello';
 
 class HelloRepository implements IHelloRepository {
   async save(hello: Hello): Promise<any> {

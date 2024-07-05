@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import HelloController from '../../infra/adapters/http/controllers/HelloController';
-import CreateHelloUseCase from '../../application/useCases/CreateHelloUseCase';
-import HelloRepository from '../../infra/adapters/database/repository/HelloRepository';
-import { Hello } from '../../domain/entity/Hello';
-import AppError from '../../shared/errors/AppError';
+import HelloController from '#infra/adapters/http/controllers/HelloController';
+import CreateHelloUseCase from '#application/useCases/CreateHelloUseCase';
+import HelloRepository from '#infra/adapters/database/repository/HelloRepository';
+import { Hello } from '#domain/entity/Hello';
+import AppError from '#shared/errors/AppError';
 
 // Mock the HelloRepository and CreateHelloUseCase
 //jest.mock('../../application/useCases/CreateHelloUseCase');
-jest.mock('../../infra/adapters/database/repository/HelloRepository');
+jest.mock('#infra/adapters/database/repository/HelloRepository');
 
 // Extend the NextFunction type to include Jest mock properties
 type MockNextFunction = NextFunction & jest.Mock;

@@ -8,5 +8,13 @@ module.exports = {
         tsconfig: 'tsconfig.json',
       },
     },
+    moduleNameMapper: {
+      '^#application/(.*)$': '<rootDir>/src/application/$1',
+      '^#domain/(.*)$': '<rootDir>/src/domain/$1',
+      '^#infra/(.*)$': '<rootDir>/src/infra/$1',
+      '^#shared/(.*)$': '<rootDir>/src/shared/$1',
+      '^#tests/(.*)$': '<rootDir>/src/tests/$1',
+      '^#root/(.*)$': '<rootDir>/src/$1'
+    },
   };
   

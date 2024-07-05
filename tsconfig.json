@@ -7,7 +7,16 @@
     "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "#application/*": ["src/application/*"],
+      "#domain/*": ["src/domain/*"],
+      "#infra/*": ["src/infra/*"],
+      "#shared/*": ["src/shared/*"],
+      "#tests/*": ["src/tests/*"],
+      "#root/*": ["src/*"]
+    }
   },
   "include": ["src/**/*.ts", "scripts/**/*.ts"],
   "exclude": ["node_modules"]
