@@ -1,5 +1,8 @@
 import winston from 'winston';
 import kleur from 'kleur';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Função para obter o dia da semana em um idioma específico
 function getLocalizedWeekday(locale: string) {
@@ -30,7 +33,6 @@ const customFormat = winston.format.printf(({ level, message, timestamp, calling
 
   return formattedMessage;
 });
-
 
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
